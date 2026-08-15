@@ -33,7 +33,7 @@ intents.voice_states = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-# Configuración de Spotify con Caché en Memoria
+# Configuración Spotify
 cache_handler = spotipy.cache_handler.MemoryCacheHandler(token_info={
     "access_token": "",
     "refresh_token": SPOTIFY_REFRESH_TOKEN,
@@ -51,16 +51,19 @@ sp_oauth = SpotifyOAuth(
 )
 sp = spotipy.Spotify(auth_manager=sp_oauth)
 
-# Configuración de YouTube con Cookies
+# Configuración YouTube Robusta
 YDL_OPTIONS = {
     "format": "bestaudio/best",
     "noplaylist": True,
     "extract_flat": "in_playlist",
     "cookiefile": "cookies.txt",
+    "ignoreerrors": True,
+    "geo_bypass": True,
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     "js_runtimes": {"node": {}},
     "extractor_args": {
         "youtube": {
-            "player_client": ["android", "web"]
+            "player_client": ["web", "android"]
         }
     }
 }
@@ -74,22 +77,14 @@ song_queue = asyncio.Queue()
 current_song_title = "Nada reproduciéndose"
 last_played_track = None
 
-# --- INTERFAZ WEB ---
+# --- WEB ---
 app = Flask(__name__)
-HTML_TEMPLATE = """
-<!DOCTYPE html>
-<html lang="es"><head><meta charset="UTF-8"><title>DjNandito Hub</title>
-<style>body{background:#121212;color:#fff;font-family:sans-serif;text-align:center;padding:50px;}</style>
-</head><body><h1>DjNandito Player</h1><p>Bot online funcionando 24/7</p></body></html>
-"""
-
 @app.route("/")
-def index(): return render_template_string(HTML_TEMPLATE)
-
+def index(): return "<h1>DjNandito Bot Online</h1>"
 @app.route("/api/status")
 def api_status(): return jsonify({"current": current_song_title})
 
-# --- LÓGICA DE AUDIO ---
+# --- LÓGICA ---
 async def get_stream_url(url_or_query):
     loop = asyncio.get_running_loop()
     try:
@@ -141,7 +136,6 @@ async def on_ready():
     bot.loop.create_task(sync_spotify_loop())
     bot.loop.create_task(process_queue())
 
-# --- COMANDOS ---
 @bot.command(name="play", aliases=["p"])
 async def play(ctx, *, query=None):
     if not ctx.author.voice: return await ctx.send("¡Entra a un canal de voz!")
