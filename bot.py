@@ -51,7 +51,7 @@ sp_oauth = SpotifyOAuth(
 )
 sp = spotipy.Spotify(auth_manager=sp_oauth)
 
-# Configuración YouTube Robusta
+# Configuración YouTube Optimizada (Sin forzar nodos externos que fallen)
 YDL_OPTIONS = {
     "format": "bestaudio/best",
     "noplaylist": True,
@@ -59,11 +59,9 @@ YDL_OPTIONS = {
     "cookiefile": "cookies.txt",
     "ignoreerrors": True,
     "geo_bypass": True,
-    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "js_runtimes": {"node": {}},
     "extractor_args": {
         "youtube": {
-            "player_client": ["web", "android"]
+            "player_client": ["web"]
         }
     }
 }
