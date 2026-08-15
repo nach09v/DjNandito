@@ -2,10 +2,9 @@ services:
   - type: web
     name: djnandito
     env: python
-    region: ohio
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: python bot.py
+    buildCommand: "apt-get update && apt-get install -y nodejs npm && pip install -r requirements.txt"
+    startCommand: "python bot.py"
     envVars:
       - key: PYTHON_VERSION
         value: 3.10.13
