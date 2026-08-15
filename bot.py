@@ -51,18 +51,17 @@ sp_oauth = SpotifyOAuth(
 )
 sp = spotipy.Spotify(auth_manager=sp_oauth)
 
-# Configuración YouTube Limpia (Sin cookies caducadas y con cliente web seguro)
+# Configuración YouTube Anti-Bloqueo (Usando cliente iOS para evitar el 429)
 YDL_OPTIONS = {
     "format": "bestaudio/best",
     "noplaylist": True,
     "extract_flat": "in_playlist",
     "ignoreerrors": True,
     "geo_bypass": True,
-    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Mobile/15E148 Safari/604.1",
     "extractor_args": {
         "youtube": {
-            "player_client": ["web"],
-            "skip": "hls,dash"
+            "player_client": ["ios", "web"]
         }
     }
 }
